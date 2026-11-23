@@ -72,3 +72,27 @@ def regresi(x, y):
             )
         baris.append(jumlah)
         matriks_augmented.append(baris)
+
+
+
+if not os.path.exist (file_csv):
+    print (f"ERROR: File {file_csv} tidak ditemukan.")
+
+try:
+    with open (file_csv, "r", encoding="utf-8_sig") as file:
+        reader = csv.DictReader(file)
+
+        if not reader.fieldnames:
+            print(f"ERROR: Header {file_csv} tidak ditemukan")
+
+        kolom_hilang = []
+        for kolom in daftar_kolom_wajib:
+            if kolom not in reader.fieldnames:
+                kolom_hilang.append(kolom)
+
+        if len(kolom_hilang) > 0:
+            print("ERROR: Kolom data pertanian tidak lengkap")
+            for kolom in kolom_hilang:
+                print (f"- kolom {kolom} tidak ditemukan")
+
+        
