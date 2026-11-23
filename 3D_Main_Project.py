@@ -75,11 +75,11 @@ def regresi(x, y):
 
 
 
-if not os.path.exist (file_csv):
-    print (f"ERROR: File {file_csv} tidak ditemukan.")
+if not os.path.exists(file_csv):
+    print(f"ERROR: File {file_csv} tidak ditemukan.")
 
 try:
-    with open (file_csv, "r", encoding="utf-8_sig") as file:
+    with open(file_csv, "r", encoding="utf-8_sig") as file:
         reader = csv.DictReader(file)
 
         if not reader.fieldnames:
