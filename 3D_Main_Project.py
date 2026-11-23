@@ -25,3 +25,25 @@ def hitung_laju_pertumbuhan(nilai_sebelumnya, nilai_sekarang):
     persentase_pertumbuhan = ((nilai_sekarang - nilai_sebelumnya) / nilai_sebelumnya) * 100
     return persentase_pertumbuhan
 
+def validasi(curah,kelembapan,suhu_rata):
+    if curah >=1500 or curah<=2000:
+        status_curah=("CURAH HUJAN BAIK")
+    elif curah>2000:
+        status_curah=("CURAH HUJAN TINGGI")
+    else:
+        status_curah=("CURAH HUJAN RENDAH")
+
+    if suhu_rata >=23 or suhu_rata<=32:
+        status_suhu=("SUHU OPTIMAL")
+    elif suhu_rata<23:
+        status_suhu=("SUHU RENDAH")
+    else:
+        status_suhu=("SUHU TINGGI")
+
+    if kelembapan >0.5:
+        status_kelembapan=("BASAH")
+    elif kelembapan>=0.4 or kelembapan <=0.5:
+        status_kelembapan=("LEMBAB")
+    else:
+        status_kelembapan=("KERING")
+    return status_curah, status_suhu, status_kelembapan
