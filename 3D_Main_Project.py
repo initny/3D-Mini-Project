@@ -47,3 +47,28 @@ def validasi(curah,kelembapan,suhu_rata):
     else:
         status_kelembapan=("KERING")
     return status_curah, status_suhu, status_kelembapan
+
+def regresi(x, y):
+    jumlah_variabel = len(x[0])
+    jumlah_data = len(x)
+    matriks_augmented = []
+
+    for baris_ke in range(jumlah_variabel):
+        baris = []
+        for kolom_ke in range(jumlah_variabel):
+            jumlah = 0
+            for indeks_data in range(jumlah_data):
+                jumlah += (
+                    x[indeks_data][baris_ke] *
+                    x[indeks_data][kolom_ke]
+                )
+            baris.append(jumlah)
+
+        jumlah = 0
+        for indeks_data in range(jumlah_data):
+            jumlah += (
+                x[indeks_data][baris_ke] *
+                y[indeks_data]
+            )
+        baris.append(jumlah)
+        matriks_augmented.append(baris)
