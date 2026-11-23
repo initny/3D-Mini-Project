@@ -12,6 +12,9 @@ daftar_kolom_wajib = [
     "Kelembapan",
     "Suhu rata-rata"
 ]
+
+data = []
+
 def baca_data(file_csv):
     if not os.path.exists(file_csv):
         print(f"ERROR: File {file_csv} tidak ditemukan.")
@@ -34,7 +37,51 @@ def baca_data(file_csv):
                 print (f"- kolom {kolom} tidak ditemukan")
             return None
         return list (reader)
-        
+
+def validasi_data(data):
+    for nomor_baris, baris in enumerate(reader, start=2):
+        jumlah_sel_terisi = 0
+        for nilai_sel in baris.values():
+            if nilai_sel is not None and nilai_sel.strip() != "":
+                jumlah_sel_terisi += 1
+
+        if jumlah_sel_terisi == 0:
+            print(f"ERROR: Baris ke-{nomor_baris} kosong sehingga dilewati")
+            continue
+
+        ada_kolom_kosong = False
+        for kolom in daftar_kolom_wajib:
+            if baris[kolom] is None or baris [kolom].strip() == "":
+                print(f"ERROR: Data pada baris ke-{nomor_baris} kolom {kolom} kosong")
+                ada_kolom_kosong = True
+                break
+
+        if ada_kolom_kosong:
+            continue
+
+        try:
+            provinsi = str (baris["Provinsi"])
+            tahun = int (baris["Tahun"])
+            nilai_produksi = float (baris["Produksi"])
+            nilai_luas_panen = float (baris["Luas Panen"])
+            curah = float (baris["Curah hujan"])
+            kelembapan = float(baris["kelembapan"])
+            suhu_rata = float (baris["Suhu rata-rata"])
+        except ValueError:
+            print(f"ERROR: Data pada baris ke-{nomor_baris} tidak valid.")
+            continue
+
+        if (
+            tahun < 0
+            or nilai_produksi < 0
+            or nilai_luas_panen < 0
+            or curah < 0
+            or kelembapan < 0
+            or suhu_rata < 0
+        ):
+            print(f"ERROR: Data angka pada baris ke-{nomor_baris} bernilai negatif sehingga dilewati")
+            continue
+
 def hitung_persentase_produktivitas(nilai_produksi, nilai_luas_panen):
     if nilai_luas_panen == 0:
         return 0.0
