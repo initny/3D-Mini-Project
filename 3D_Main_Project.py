@@ -12,7 +12,29 @@ daftar_kolom_wajib = [
     "Kelembapan",
     "Suhu rata-rata"
 ]
+def baca_data(file_csv):
+    if not os.path.exists(file_csv):
+        print(f"ERROR: File {file_csv} tidak ditemukan.")
+        return None
 
+    with open(file_csv, "r", encoding="utf-8_sig") as file:
+        reader = csv.DictReader(file)
+
+        if not reader.fieldnames:
+            print(f"ERROR: Header {file_csv} tidak ditemukan")
+            return None
+        kolom_hilang = []
+        for kolom in daftar_kolom_wajib:
+            if kolom not in reader.fieldnames:
+                kolom_hilang.append(kolom)
+
+        if len(kolom_hilang) > 0:
+            print("ERROR: Kolom data pertanian tidak lengkap")
+            for kolom in kolom_hilang:
+                print (f"- kolom {kolom} tidak ditemukan")
+            return None
+        return list (reader)
+        
 def hitung_persentase_produktivitas(nilai_produksi, nilai_luas_panen):
     if nilai_luas_panen == 0:
         return 0.0
@@ -74,25 +96,5 @@ def regresi(x, y):
         matriks_augmented.append(baris)
 
 
-
-if not os.path.exists(file_csv):
-    print(f"ERROR: File {file_csv} tidak ditemukan.")
-
-try:
-    with open(file_csv, "r", encoding="utf-8_sig") as file:
-        reader = csv.DictReader(file)
-
-        if not reader.fieldnames:
-            print(f"ERROR: Header {file_csv} tidak ditemukan")
-
-        kolom_hilang = []
-        for kolom in daftar_kolom_wajib:
-            if kolom not in reader.fieldnames:
-                kolom_hilang.append(kolom)
-
-        if len(kolom_hilang) > 0:
-            print("ERROR: Kolom data pertanian tidak lengkap")
-            for kolom in kolom_hilang:
-                print (f"- kolom {kolom} tidak ditemukan")
 
         
