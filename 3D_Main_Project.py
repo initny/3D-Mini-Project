@@ -10,28 +10,43 @@ KOLOM_WAJIB = [ "Provinsi", "Tahun", "Produksi", "Luas Panen", "Curah hujan", "K
 
 FAKTOR = ["luas_panen", "curah_hujan", "kelembapan", "suhu"]
 
-def baca_data(file_csv):
-    if not os.path.exists(file_csv):
-        print(f"ERROR: File {file_csv} tidak ditemukan.")
-        return None
+def baca_data_csv():
+    data = []
 
-    with open(file_csv, "r", encoding="utf-8_sig") as file:
-        reader = csv.DictReader(file)
+    try:
+        with open(FILE_CSV, "r", newline="", encoding="utf-8-sig") as file:
+            baris_header = file.readline()
+            pemisah = ";" if ";" in baris_header else ","
+            nama_kolom = [h.strip() for h in baris_header.split(pemisah)]
 
-        if not reader.fieldnames:
-            print(f"ERROR: Header {file_csv} tidak ditemukan")
-            return None
-        kolom_hilang = []
-        for kolom in daftar_kolom_wajib:
-            if kolom not in reader.fieldnames:
-                kolom_hilang.append(kolom)
+            if not all(kolom in nama_kolom for kolom in KOLOM_WAJIB):
+                print("Error: Kolom dataset tidak lengkap.")
+                return []
 
-        if len(kolom_hilang) > 0:
-            print("ERROR: Kolom data pertanian tidak lengkap")
-            for kolom in kolom_hilang:
-                print (f"- kolom {kolom} tidak ditemukan")
-            return None
-        return list (reader)
+            reader = csv.DictReader(file, fieldnames=nama_kolom, delimiter=pemisah)
+
+            for nomor, row in enumerate(reader, start=2):
+                rekam_valid = validasi_baris_csv(row, nomor)
+                if rekam_valid is not None:
+                    data.append(rekam_valid)
+
+    except FileNotFoundError:
+        print("Error: File CSV tidak ditemukan.")
+        return []
+    except PermissionError:
+        print("Error: File CSV tidak dapat diakses.")
+        return []
+
+    if not data:
+        print("Error: Tidak ada data yang valid.")
+        return data
+
+    for i in range(len(data)):
+        for j in range(i + 1, len(data)):
+            if data[j]["tahun"] < data[i]["tahun"]:
+                data[i], data[j] = data[j], data[i]
+
+    return data
 
 def validasi_data(data):
     for nomor_baris, baris in enumerate(reader, start=2):
