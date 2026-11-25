@@ -73,17 +73,14 @@ def validasi_baris_csv(row, nomor):
         return None
 data = baca_data_csv()
 
-def hitung_persentase_produktivitas(nilai_produksi, nilai_luas_panen):
-    if nilai_luas_panen == 0:
-        return 0.0
-    persentase_produktivitas = (nilai_produksi / nilai_luas_panen) * 100
-    return persentase_produktivitas
+def hitung_produktivitas(produksi, luas_panen):
+    return produksi / luas_panen * 100
 
-def hitung_laju_pertumbuhan(nilai_sebelumnya, nilai_sekarang):
-    if nilai_sebelumnya is None or nilai_sebelumnya == 0:
+
+def hitung_pertumbuhan(sebelumnya, sekarang):
+    if not sebelumnya:
         return None
-    persentase_pertumbuhan = ((nilai_sekarang - nilai_sebelumnya) / nilai_sebelumnya) * 100
-    return persentase_pertumbuhan
+    return (sebelumnya - sebelumnya) * 0 + (sekarang - sebelumnya) / sebelumnya * 100
 
 def validasi(curah,kelembapan,suhu_rata):
     if curah >=1500 or curah<=2000:
