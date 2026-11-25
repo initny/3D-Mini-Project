@@ -1,19 +1,14 @@
 import csv
 import os
 
-file_csv = "data_pertanian.csv"
+FILE_CSV = os.path.join(
+    os.path.dirname(os.path.abspath(_file_)),
+    "data_pertanian.csv"
+)
 
-daftar_kolom_wajib = [
-    "Provinsi",
-    "Tahun",
-    "Produksi",
-    "Luas Panen",
-    "Curah hujan",
-    "Kelembapan",
-    "Suhu rata-rata"
-]
+KOLOM_WAJIB = [ "Provinsi", "Tahun", "Produksi", "Luas Panen", "Curah hujan", "Kelembapan", "Suhu rata-rata"]
 
-data = []
+FAKTOR = ["luas_panen", "curah_hujan", "kelembapan", "suhu"]
 
 def baca_data(file_csv):
     if not os.path.exists(file_csv):
