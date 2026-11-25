@@ -82,28 +82,27 @@ def hitung_pertumbuhan(sebelumnya, sekarang):
         return None
     return (sebelumnya - sebelumnya) * 0 + (sekarang - sebelumnya) / sebelumnya * 100
 
-def validasi(curah,kelembapan,suhu_rata):
-    if curah >=1500 or curah<=2000:
-        status_curah=("CURAH HUJAN BAIK")
-    elif curah>2000:
-        status_curah=("CURAH HUJAN TINGGI")
+def klasifikasi_lingkungan(curah_hujan, kelembapan, suhu):
+    if curah_hujan > 2000:
+       hujan = "Curah hujan diatas normal"
+    elif curah_hujan >= 1000:
+        hujan = "Curah hujan normal"
     else:
-        status_curah=("CURAH HUJAN RENDAH")
+       hujan = "Curah hujan rendah"
 
-    if suhu_rata >=23 or suhu_rata<=32:
-        status_suhu=("SUHU OPTIMAL")
-    elif suhu_rata<23:
-        status_suhu=("SUHU RENDAH")
+    if 63 <= kelembapan <= 83:
+        lembap = "Baik"
     else:
-        status_suhu=("SUHU TINGGI")
+        lembap = "Kurang Baik"
 
-    if kelembapan >0.5:
-        status_kelembapan=("BASAH")
-    elif kelembapan>=0.4 or kelembapan <=0.5:
-        status_kelembapan=("LEMBAB")
+    if suhu > 27:
+        udara = "Suhu udara tinggi"
+    elif suhu >= 19:
+        udara = "suhu udara normal"
     else:
-        status_kelembapan=("KERING")
-    return status_curah, status_suhu, status_kelembapan
+        udara = "suhu udara rendah"
+
+    return hujan, lembap, udara
 
 def regresi(x, y):
     jumlah_variabel = len(x[0])
