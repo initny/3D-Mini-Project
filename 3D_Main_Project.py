@@ -48,49 +48,30 @@ def baca_data_csv():
 
     return data
 
-def validasi_data(data):
-    for nomor_baris, baris in enumerate(reader, start=2):
-        jumlah_sel_terisi = 0
-        for nilai_sel in baris.values():
-            if nilai_sel is not None and nilai_sel.strip() != "":
-                jumlah_sel_terisi += 1
+def validasi_baris_csv(row, nomor):
+    try:
+        if any(row[k] is None or not row[k].strip() for k in KOLOM_WAJIB):
+            raise ValueError
 
-        if jumlah_sel_terisi == 0:
-            print(f"ERROR: Baris ke-{nomor_baris} kosong sehingga dilewati")
-            continue
+        tahun = int(row["Tahun"])
+        produksi = float(row["Produksi"])
+        luas_panen = float(row["Luas Panen"])
+        curah_hujan = float(row["Curah hujan"])
+        kelembapan = float(row["Kelembapan"])
+        suhu = float(row["Suhu rata-rata"])
 
-        ada_kolom_kosong = False
-        for kolom in daftar_kolom_wajib:
-            if baris[kolom] is None or baris [kolom].strip() == "":
-                print(f"ERROR: Data pada baris ke-{nomor_baris} kolom {kolom} kosong")
-                ada_kolom_kosong = True
-                break
+        if (tahun <= 0 or produksi <0 or luas_panen <=0
+                or curah_hujan < 0 or suhu < 0
+                or not 0 <= kelembapan < 100):
+            raise ValueError
 
-        if ada_kolom_kosong:
-            continue
+        return {"provinsi": row["Provinsi"].strip(), "tahun": tahun, "produksi": produksi, "luas_panen": luas_panen,
+                "curah_hujan": curah_hujan, "kelembapan": kelembapan, "suhu": suhu}
 
-        try:
-            provinsi = str (baris["Provinsi"])
-            tahun = int (baris["Tahun"])
-            nilai_produksi = float (baris["Produksi"])
-            nilai_luas_panen = float (baris["Luas Panen"])
-            curah = float (baris["Curah hujan"])
-            kelembapan = float(baris["kelembapan"])
-            suhu_rata = float (baris["Suhu rata-rata"])
-        except ValueError:
-            print(f"ERROR: Data pada baris ke-{nomor_baris} tidak valid.")
-            continue
-
-        if (
-            tahun < 0
-            or nilai_produksi < 0
-            or nilai_luas_panen < 0
-            or curah < 0
-            or kelembapan < 0
-            or suhu_rata < 0
-        ):
-            print(f"ERROR: Data angka pada baris ke-{nomor_baris} bernilai negatif sehingga dilewati")
-            continue
+    except (ValueError, TypeError):
+        print(f"Peringatan: Data baris {nomor} tidak valid.")
+        return None
+data = baca_data_csv()
 
 def hitung_persentase_produktivitas(nilai_produksi, nilai_luas_panen):
     if nilai_luas_panen == 0:
