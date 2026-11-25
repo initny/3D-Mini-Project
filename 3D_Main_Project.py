@@ -189,3 +189,17 @@ def estimasi_tahun(tahun, produksi_sebelumnya=None):
     )
 
     return rekam
+
+def minta_pilihan(pesan, pilihan):
+    while True:
+        teks = input(pesan).strip().lower()
+        if teks in pilihan:
+            return teks
+        print(f"ERROR: Pilihan tidak tersedia. Silakan ketik {', '.join(pilihan)}.")
+
+def minta_tahun(pesan):
+    while True:
+        teks = input(pesan).strip()
+        if teks.isdigit() and int(teks) > 0:
+            return int(teks)
+        print("ERROR: Masukkan angka bilangan bulat positif.")
