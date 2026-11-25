@@ -329,8 +329,9 @@ def menu_perbandingan_tahun():
         if minta_pilihan("Pilih (1/2): ", ["1", "2"]) == "2":
             break
 
-
-        if data:
+data = baca_data_csv()
+LEBAR = 130
+if data:
     try:
         riwayat = {}
         for i, d in enumerate(data):
