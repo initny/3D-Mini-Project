@@ -104,31 +104,20 @@ def klasifikasi_lingkungan(curah_hujan, kelembapan, suhu):
 
     return hujan, lembap, udara
 
-def regresi(x, y):
-    jumlah_variabel = len(x[0])
-    jumlah_data = len(x)
-    matriks_augmented = []
+def hitung_regresi_sederhana(x, y):
+    n = len(x)
+    sum_x = sum(x)
+    sum_y = sum(y)
+    sum_xy = sum(i * j for i, j in zip(x, y))
+    sum_x2 = sum(i * i for i in x)
 
-    for baris_ke in range(jumlah_variabel):
-        baris = []
-        for kolom_ke in range(jumlah_variabel):
-            jumlah = 0
-            for indeks_data in range(jumlah_data):
-                jumlah += (
-                    x[indeks_data][baris_ke] *
-                    x[indeks_data][kolom_ke]
-                )
-            baris.append(jumlah)
+    penyebut = n * sum_x2 - sum_x ** 2
 
-        jumlah = 0
-        for indeks_data in range(jumlah_data):
-            jumlah += (
-                x[indeks_data][baris_ke] *
-                y[indeks_data]
-            )
-        baris.append(jumlah)
-        matriks_augmented.append(baris)
+    if penyebut == 0:
+        raise ValueError("Data tahun tidak bervariasi, regresi tidak dapat dihitung.")
 
+    a = (sum_y * sum_x2 - sum_x * sum_xy) / penyebut
+    b = (n * sum_xy - sum_x * sum_y) / penyebut
 
-
+    return [a, b]
         
