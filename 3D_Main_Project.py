@@ -2,7 +2,7 @@ import csv
 import os
 
 FILE_CSV = os.path.join(
-    os.path.dirname(os.path.abspath(_file_)),
+    os.path.dirname(os.path.abspath(__file__)),
     "data_pertanian.csv"
 )
 
