@@ -203,3 +203,54 @@ def minta_tahun(pesan):
         if teks.isdigit() and int(teks) > 0:
             return int(teks)
         print("ERROR: Masukkan angka bilangan bulat positif.")
+
+def tampilkan_tabel(judul, daftar):
+    print("\n" + "=" * LEBAR)
+    print(judul)
+    print("=" * LEBAR)
+    print(
+        f"{'Tahun':<7} | {'Provinsi':<16} | {'Produktivitas (%)':>17} | "
+        f"{'Pertumbuhan (%)':>15} | {'Curah Hujan':<26} | "
+        f"{'Kelembapan':<15}| {'Suhu':<17}"
+    )
+    print("-" * LEBAR)
+
+    for r in daftar:
+        tahun_teks = str(r["tahun"])
+
+        if r["pertumbuhan"] is None:
+            teks_tumbuh = f"{'N/A (Awal)':>15}"
+        else:
+            teks_tumbuh = f"{r['pertumbuhan']:>14.2f}%"
+
+        print(
+            f"{tahun_teks:<7} | {r['provinsi']:<16} | "
+            f"{r['produktivitas']:>16.2f}% | {teks_tumbuh} | "
+            f"{r['status_hujan']:<26} | {r['status_kelembapan']:<15}| "
+            f"{r['status_suhu']:<17}"
+        )
+
+    print("-" * LEBAR)
+
+    for nama, kunci in (("Produktivitas", "produktivitas"),
+                        ("Pertumbuhan  ", "pertumbuhan")):
+        ada = [r for r in daftar if r[kunci] is not None]
+        if not ada:
+            continue
+
+        tertinggi = ada[0]
+        terendah = ada[0]
+        for r in ada:
+            if r[kunci] > tertinggi[kunci]:
+                tertinggi = r
+            if r[kunci] < terendah[kunci]:
+                terendah = r
+        rata = sum(r[kunci] for r in ada) / len(ada)
+
+        print(
+            f"{nama}  -> Rata-rata: {rata:.2f}% | "
+            f"Tertinggi: {tertinggi[kunci]:.2f}% ({tertinggi['tahun']}) | "
+            f"Terendah: {terendah[kunci]:.2f}% ({terendah['tahun']})"
+        )
+
+    print("=" * LEBAR)
