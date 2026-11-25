@@ -269,3 +269,28 @@ def tampilkan_hasil_tahun(hasil):
     print(f"Status Curah Hujan        : {hasil['status_hujan']}")
     print(f"Status Kelembapan         : {hasil['status_kelembapan']}")
     print(f"Status Suhu Rata-rata     : {hasil['status_suhu']}")
+
+    
+def tampilkan_perbandingan(h1, h2):
+    p1 = h1["pertumbuhan"]
+    p2 = h2["pertumbuhan"]
+
+    print(f"\nPerbandingan Pertumbuhan Tahun {h1['tahun']} vs Tahun {h2['tahun']}")
+    print("-" * 60)
+
+    for h in (h1, h2):
+        p = h["pertumbuhan"]
+        print(f"Tahun {h['tahun']} : Pertumbuhan "
+              + (f"{p:.2f}%" if p is not None else "N/A"))
+
+    if p1 is not None and p2 is not None:
+        selisih = p1 - p2
+        if selisih > 0:
+            ket = "lebih tinggi"
+        elif selisih < 0:
+            ket = "lebih rendah"
+        else:
+            ket = "sama"
+
+        print(f"Selisih    : Laju pertumbuhan tahun {h1['tahun']} {ket} "
+              f"sebesar {abs(selisih):.2f}% dibanding tahun {h2['tahun']}.")
