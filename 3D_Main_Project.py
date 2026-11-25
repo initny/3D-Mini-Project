@@ -68,8 +68,6 @@ def validasi_baris_csv(row, nomor):
     except (ValueError, TypeError):
         print(f"Peringatan: Data baris {nomor} tidak valid.")
         return None
-
-
 def hitung_produktivitas(produksi, luas_panen):
     return produksi / luas_panen * 100
 
@@ -77,7 +75,8 @@ def hitung_produktivitas(produksi, luas_panen):
 def hitung_pertumbuhan(sebelumnya, sekarang):
     if not sebelumnya:
         return None
-    return (sebelumnya - sebelumnya) * 0 + (sekarang - sebelumnya) / sebelumnya * 100
+
+    return (sekarang - sebelumnya) / sebelumnya * 100
 
 def klasifikasi_lingkungan(curah_hujan, kelembapan, suhu):
     if curah_hujan > 2000:
@@ -254,3 +253,19 @@ def tampilkan_tabel(judul, daftar):
         )
 
     print("=" * LEBAR)
+
+def tampilkan_hasil_tahun(hasil):
+    jenis = "data historis" if hasil["tahun"] in riwayat else "prediksi"
+
+    print(f"\nHasil Analisis Tahun {hasil['tahun']} ({jenis})")
+    print("-" * 50)
+    print(f"Persentase Produktivitas  : {hasil['produktivitas']:.2f}%")
+
+    if hasil["pertumbuhan"] is None:
+        print("Laju Pertumbuhan Produksi : N/A (Tahun awal dataset)")
+    else:
+        print(f"Laju Pertumbuhan Produksi : {hasil['pertumbuhan']:.2f}%")
+
+    print(f"Status Curah Hujan        : {hasil['status_hujan']}")
+    print(f"Status Kelembapan         : {hasil['status_kelembapan']}")
+    print(f"Status Suhu Rata-rata     : {hasil['status_suhu']}")
