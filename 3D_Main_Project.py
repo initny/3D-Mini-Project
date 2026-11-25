@@ -117,4 +117,40 @@ def hitung_regresi_sederhana(x, y):
     b = (n * sum_xy - sum_x * sum_y) / penyebut
 
     return [a, b]
+
+def hitung_regresi(X, y):
+    n = len(X)
+    k = len(X[0])
+
+    if n < k:
+        raise ValueError(f"Minimal diperlukan {k} data valid untuk regresi.")
+
+    A = [[sum(X[r][i] * X[r][j] for r in range(n)) for j in range(k)]
+         for i in range(k)]
+    b = [sum(X[r][i] * y[r] for r in range(n)) for i in range(k)]
+
+    for i in range(k):
+        p = i
+        for r in range(i + 1, k):
+            if abs(A[r][i]) > abs(A[p][i]):
+                p = r
+
+        A[i], A[p] = A[p], A[i]
+        b[i], b[p] = b[p], b[i]
+
+        if abs(A[i][i]) < 1e-12:
+            raise ValueError("Matriks singular, regresi tidak dapat dihitung.")
+
+        for r in range(i + 1, k):
+            f = A[r][i] / A[i][i]
+            for c in range(i, k):
+                A[r][c] -= f * A[i][c]
+            b[r] -= f * b[i]
+
+    koef = [0.0] * k
+    for i in range(k - 1, -1, -1):
+        koef[i] = (b[i] - sum(A[i][j] * koef[j]
+                              for j in range(i + 1, k))) / A[i][i]
+
+    return koef
         
