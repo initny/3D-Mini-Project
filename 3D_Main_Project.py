@@ -294,3 +294,37 @@ def tampilkan_perbandingan(h1, h2):
 
         print(f"Selisih    : Laju pertumbuhan tahun {h1['tahun']} {ket} "
               f"sebesar {abs(selisih):.2f}% dibanding tahun {h2['tahun']}.")
+
+def menu_analisis_tahun():
+    tahun = minta_tahun("\nIngin analisis tahun berapa? ")
+    tampilkan_hasil_tahun(estimasi_tahun(tahun))
+
+    print("\n1. Analisis tahun lanjutan")
+    print("2. Selesai / kembali")
+
+    if minta_pilihan("Pilih (1/2): ", ["1", "2"]) == "2":
+        return
+
+    jumlah = minta_tahun(f"Mau lihat prediksi berapa tahun ke depan (dari tahun {tahun})? ")
+    daftar = [estimasi_tahun(t) for t in range(tahun, tahun + jumlah + 1)]
+    tampilkan_tabel(f"TABEL HASIL ANALISIS TAHUN {tahun} - {tahun + jumlah}", daftar)
+
+    input("\nTekan Enter untuk kembali ke analisis lanjutan...")
+
+
+def menu_perbandingan_tahun():
+    while True:
+        tahun_1 = minta_tahun("\nMasukkan tahun pertama yang ingin dibandingkan : ")
+        tahun_2 = minta_tahun("Masukkan tahun kedua yang ingin dibandingkan   : ")
+
+        while tahun_2 == tahun_1:
+            print("ERROR: Tahun kedua harus berbeda dari tahun pertama.")
+            tahun_2 = minta_tahun("Masukkan tahun kedua yang ingin dibandingkan   : ")
+
+        tampilkan_perbandingan(estimasi_tahun(tahun_1), estimasi_tahun(tahun_2))
+
+        print("\n1. Bandingkan tahun lain")
+        print("2. Selesai / kembali")
+
+        if minta_pilihan("Pilih (1/2): ", ["1", "2"]) == "2":
+            break
