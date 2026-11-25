@@ -270,7 +270,7 @@ def tampilkan_hasil_tahun(hasil):
     print(f"Status Kelembapan         : {hasil['status_kelembapan']}")
     print(f"Status Suhu Rata-rata     : {hasil['status_suhu']}")
 
-    
+
 def tampilkan_perbandingan(h1, h2):
     p1 = h1["pertumbuhan"]
     p2 = h2["pertumbuhan"]
@@ -328,3 +328,65 @@ def menu_perbandingan_tahun():
 
         if minta_pilihan("Pilih (1/2): ", ["1", "2"]) == "2":
             break
+
+
+        if data:
+    try:
+        riwayat = {}
+        for i, d in enumerate(data):
+            sebelumnya = data[i - 1]["produksi"] if i > 0 else None
+            riwayat[d["tahun"]] = buat_rekam_sementara = {
+                **d,
+                "produktivitas": hitung_produktivitas(d["produksi"], d["luas_panen"]),
+                "pertumbuhan": hitung_pertumbuhan(sebelumnya, d["produksi"]),
+                "status_hujan": klasifikasi_lingkungan(d["curah_hujan"], d["kelembapan"], d["suhu"])[0],
+                "status_kelembapan": klasifikasi_lingkungan(d["curah_hujan"], d["kelembapan"], d["suhu"])[1],
+                "status_suhu": klasifikasi_lingkungan(d["curah_hujan"], d["kelembapan"], d["suhu"])[2],
+            }
+
+   
+        koef = hitung_regresi([[1.0] + [d[n] for n in FAKTOR] for d in data],
+            [d["produksi"] for d in data])
+
+        tren = {n: hitung_regresi_sederhana([d["tahun"] for d in data], [d[n] for d in data]) for n in FAKTOR}
+
+    except ValueError as e:
+        print(f"ERROR: Terjadi kesalahan dalam analisis data: {e}")
+    else:
+        print("\n" + "=" * LEBAR)
+        print("PROGRAM ANALISIS KETERKAITAN LINGKUNGAN DENGAN PRODUKTIVITAS PANEN PADI DAN PERTUMBUHAN PRODUKSI PADI PER TAHUN".center(LEBAR))
+        print(f"({len(data)} data valid)".center(LEBAR))
+        print("=" * LEBAR)
+
+        while True:
+            print("\nMENU UTAMA")
+            print("a. Tampilkan hasil analisis / rekap data")
+            print("b. Analisis lanjutan")
+            print("c. Keluar")
+
+            menu = minta_pilihan("Pilih menu (a/b/c): ", ["a", "b", "c"])
+
+            if menu == "a":
+                tampilkan_tabel("TABEL HASIL ANALISIS: PRODUKTIVITAS, PERTUMBUHAN & KLASIFIKASI LINGKUNGAN", list(riwayat.values()))
+                input("\nTekan Enter untuk kembali ke menu utama...")
+
+            elif menu == "b":
+                pilihan = ""
+                while pilihan != "3":
+                    print("\n" + "=" * 50)
+                    print("ANALISIS LANJUTAN")
+                    print("=" * 50)
+                    print("1. Analisis tahun tertentu (dan prediksi tahun lanjutan)")
+                    print("2. Perbandingan pertumbuhan dua tahun yang berbeda")
+                    print("3. Kembali ke menu utama")
+
+                    pilihan = minta_pilihan("Pilih (1/2/3): ", ["1", "2", "3"])
+
+                    if pilihan == "1":
+                        menu_analisis_tahun()
+                    elif pilihan == "2":
+                        menu_perbandingan_tahun()
+
+            else:
+                print("Program diakhiri. Terima kasih!")
+                break
