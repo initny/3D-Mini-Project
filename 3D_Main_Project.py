@@ -33,9 +33,6 @@ def baca_data_csv():
     except FileNotFoundError:
         print("Error: File CSV tidak ditemukan.")
         return []
-    except PermissionError:
-        print("Error: File CSV tidak dapat diakses.")
-        return []
 
     if not data:
         print("Error: Tidak ada data yang valid.")
