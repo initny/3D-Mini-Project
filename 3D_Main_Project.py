@@ -153,4 +153,39 @@ def hitung_regresi(X, y):
                               for j in range(i + 1, k))) / A[i][i]
 
     return koef
-        
+
+def estimasi_tahun(tahun, produksi_sebelumnya=None):
+    if tahun in riwayat:
+        return riwayat[tahun]
+
+    hasil = {}
+    for t in (tahun - 1, tahun):
+        if t in riwayat:
+            hasil[t] = riwayat[t]
+        else:
+            proyeksi = {n: tren[n][0] + tren[n][1] * t for n in FAKTOR}
+            produksi = koef[0] + sum(
+                koef[i + 1] * proyeksi[n] for i, n in enumerate(FAKTOR)
+            )
+            hasil[t] = {
+                "provinsi": data[0]["provinsi"],
+                "tahun": t,
+                "produksi": produksi,
+                **proyeksi
+            }
+
+    d = hasil[tahun]
+    prod_prev = (
+        produksi_sebelumnya
+        if produksi_sebelumnya is not None
+        else hasil[tahun - 1]["produksi"]
+    )
+
+    rekam = dict(d)
+    rekam["produktivitas"] = hitung_produktivitas(d["produksi"], d["luas_panen"])
+    rekam["pertumbuhan"] = hitung_pertumbuhan(prod_prev, d["produksi"])
+    rekam["status_hujan"], rekam["status_kelembapan"], rekam["status_suhu"] = (
+        klasifikasi_lingkungan(d["curah_hujan"], d["kelembapan"], d["suhu"])
+    )
+
+    return rekam
