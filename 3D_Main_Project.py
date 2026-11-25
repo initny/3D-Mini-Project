@@ -62,7 +62,7 @@ def validasi_baris_csv(row, nomor):
 
         if (tahun <= 0 or produksi <0 or luas_panen <=0
                 or curah_hujan < 0 or suhu < 0
-                or not 0 <= kelembapan < 100):
+                or kelembapan <= 0):
             raise ValueError
 
         return {"provinsi": row["Provinsi"].strip(), "tahun": tahun, "produksi": produksi, "luas_panen": luas_panen,
@@ -71,7 +71,7 @@ def validasi_baris_csv(row, nomor):
     except (ValueError, TypeError):
         print(f"Peringatan: Data baris {nomor} tidak valid.")
         return None
-data = baca_data_csv()
+
 
 def hitung_produktivitas(produksi, luas_panen):
     return produksi / luas_panen * 100
