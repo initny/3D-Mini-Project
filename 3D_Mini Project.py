@@ -84,8 +84,8 @@ def validasi_baris_csv(row, nomor):
         alasan = "Luas Panen harus lebih dari 0"
     elif curah_hujan < 0:
         alasan = "Curah hujan bernilai negatif"
-    elif kelembapan <= 0:
-        alasan = "Kelembapan harus lebih dari 0"
+    elif    100 <= kelembapan <= 0:
+        alasan = "Kelembapan harus lebih dari 0 dan kurang dari 100"
     elif suhu < 0:
         alasan = "Suhu rata-rata bernilai negatif"
     else:
