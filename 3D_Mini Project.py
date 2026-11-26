@@ -46,28 +46,59 @@ def baca_data_csv():
     return data
 
 def validasi_baris_csv(row, nomor):
+    for k in KOLOM_WAJIB:
+        if row[k] is None or not row[k].strip():
+            print(f"Peringatan: Data baris {nomor} tidak valid karena kolom '{k}' kosong.")
+            return None
+
     try:
-        if any(row[k] is None or not row[k].strip() for k in KOLOM_WAJIB):
-            raise ValueError
-
-        tahun = int(row["Tahun"])
-        produksi = float(row["Produksi"])
-        luas_panen = float(row["Luas Panen"])
-        curah_hujan = float(row["Curah hujan"])
-        kelembapan = float(row["Kelembapan"])
-        suhu = float(row["Suhu rata-rata"])
-
-        if (tahun <= 0 or produksi <0 or luas_panen <=0
-                or curah_hujan < 0 or suhu < 0
-                or kelembapan <= 0):
-            raise ValueError
-
-        return {"provinsi": row["Provinsi"].strip(), "tahun": tahun, "produksi": produksi, "luas_panen": luas_panen,
-                "curah_hujan": curah_hujan, "kelembapan": kelembapan, "suhu": suhu}
-
-    except (ValueError, TypeError):
-        print(f"Peringatan: Data baris {nomor} tidak valid.")
+        tahun = int(row["Tahun"].strip())
+    except ValueError:
+        print(f"Peringatan: Data baris {nomor} tidak valid karena Tahun bukan bilangan bulat "
+              f"(nilai: '{row['Tahun'].strip()}').")
         return None
+
+    angka = {}
+    for kolom in ("Produksi", "Luas Panen", "Curah hujan", "Kelembapan", "Suhu rata-rata"):
+        asli = row[kolom].strip()
+        try:
+            nilai = float(asli)
+        except ValueError:
+            print(f"Peringatan: Data baris {nomor} tidak valid karena {kolom} bukan angka "
+                  f"(nilai: '{asli}').")
+            return None
+
+        angka[kolom] = nilai
+
+    produksi = angka["Produksi"]
+    luas_panen = angka["Luas Panen"]
+    curah_hujan = angka["Curah hujan"]
+    kelembapan = angka["Kelembapan"]
+    suhu = angka["Suhu rata-rata"]
+
+    if tahun <= 0:
+        alasan = "Tahun harus lebih dari 0"
+    elif produksi < 0:
+        alasan = "Produksi bernilai negatif"
+    elif luas_panen <= 0:
+        alasan = "Luas Panen harus lebih dari 0"
+    elif curah_hujan < 0:
+        alasan = "Curah hujan bernilai negatif"
+    elif kelembapan <= 0:
+        alasan = "Kelembapan harus lebih dari 0"
+    elif suhu < 0:
+        alasan = "Suhu rata-rata bernilai negatif"
+    else:
+        alasan = None
+
+    if alasan:
+        print(f"Peringatan: Data baris {nomor} tidak valid karena {alasan}.")
+        return None
+
+    return {"provinsi": row["Provinsi"].strip(), "tahun": tahun, "produksi": produksi,
+            "luas_panen": luas_panen, "curah_hujan": curah_hujan,
+            "kelembapan": kelembapan, "suhu": suhu}
+
 def hitung_produktivitas(produksi, luas_panen):
     return produksi / luas_panen * 100
 
