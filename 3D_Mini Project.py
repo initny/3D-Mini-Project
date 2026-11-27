@@ -3,7 +3,7 @@ import os
 
 FILE_CSV = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
-    r"c:\Users\USER\Downloads\Mini Project\data_pertanian.csv (salah).csv"
+    "data_pertanian.csv"
 )
 
 KOLOM_WAJIB = [ "Provinsi", "Tahun", "Produksi", "Luas Panen", "Curah hujan", "Kelembapan", "Suhu rata-rata"]
