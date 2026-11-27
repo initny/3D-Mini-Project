@@ -3,7 +3,7 @@ import os
 
 FILE_CSV = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
-    "data_pertanian.csv"
+    r"c:\Users\USER\Downloads\Mini Project\data_pertanian.csv (salah).csv"
 )
 
 KOLOM_WAJIB = [ "Provinsi", "Tahun", "Produksi", "Luas Panen", "Curah hujan", "Kelembapan", "Suhu rata-rata"]
@@ -84,7 +84,7 @@ def validasi_baris_csv(row, nomor):
         alasan = "Luas Panen harus lebih dari 0"
     elif curah_hujan < 0:
         alasan = "Curah hujan bernilai negatif"
-    elif    100 <= kelembapan <= 0:
+    elif kelembapan <= 0 or kelembapan >= 100:
         alasan = "Kelembapan harus lebih dari 0 dan kurang dari 100"
     elif suhu < 0:
         alasan = "Suhu rata-rata bernilai negatif"
